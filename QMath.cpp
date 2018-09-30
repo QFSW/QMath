@@ -426,7 +426,7 @@ std::string Add::toString(bool showParentheses)
 
 Expression* Add::simplify()
 {
-	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	if (isConstant()) { return new Number(evaluate()); }
 	else
 	{
 		Expression* leftSim = leftOperand->simplify();
@@ -478,7 +478,7 @@ std::string Subtract::toString(bool showParentheses)
 
 Expression* Subtract::simplify()
 {
-	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	if (isConstant()) { return new Number(evaluate()); }
 	else
 	{
 		Expression* leftSim = leftOperand->simplify();
@@ -557,7 +557,7 @@ std::string Multiply::toString(bool showParentheses)
 
 Expression* Multiply::simplify()
 {
-	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	if (isConstant()) { return new Number(evaluate()); }
 	else
 	{
 		Expression* leftSim = leftOperand->simplify();
@@ -633,7 +633,7 @@ std::string Divide::toString(bool showParentheses)
 
 Expression* Divide::simplify()
 {
-	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	if (isConstant()) { return new Number(evaluate()); }
 	else
 	{
 		Expression* leftSim = leftOperand->simplify();
@@ -727,7 +727,7 @@ std::string Exponent::toString(bool showParentheses)
 
 Expression* Exponent::simplify()
 {
-	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	if (isConstant()) { return new Number(evaluate()); }
 	else
 	{
 		if (leftOperand->isConstant())
