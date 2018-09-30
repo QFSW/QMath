@@ -447,39 +447,35 @@ std::string Subtract::toString(bool showParentheses)
 
 Expression* Subtract::simplify()
 {
-	Expression* leftSim = leftOperand->simplify();
-	Expression* rightSim = rightOperand->simplify();
-
-	if (leftSim->isConstant() && rightSim->isConstant())
+	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
+	else
 	{
-		Number* simplified = new Number(leftSim->evaluate() - rightSim->evaluate());
+		Expression* leftSim = leftOperand->simplify();
+		Expression* rightSim = rightOperand->simplify();
+
+		if (leftSim->isConstant() && leftSim->evaluate() == 0)
+		{
+			delete leftSim;
+			return new Multiply(-1, rightSim);
+		}
+		else if (rightSim->isConstant() && rightSim->evaluate() == 0)
+		{
+			delete rightSim;
+			return leftSim;
+		}
+
+		if (*leftSim == *rightSim)
+		{
+			delete leftSim;
+			delete rightSim;
+			return new Number(0);
+		}
+
+		Expression* result = factoriseLinear<Subtract>(leftSim, rightSim);
 		delete leftSim;
 		delete rightSim;
-		return simplified;
+		return result;
 	}
-
-	if (leftSim->isConstant() && leftSim->evaluate() == 0)
-	{
-		delete leftSim;
-		return new Multiply(-1, rightSim);
-	}
-	else if (rightSim->isConstant() && rightSim->evaluate() == 0)
-	{
-		delete rightSim;
-		return leftSim;
-	}
-
-	if (*leftSim == *rightSim)
-	{
-		delete leftSim;
-		delete rightSim;
-		return new Number(0);
-	}
-	
-	Expression* result = factoriseLinear<Subtract>(leftSim, rightSim);
-	delete leftSim;
-	delete rightSim;
-	return result;
 }
 
 unsigned char Subtract::precedence() { return 1; }
