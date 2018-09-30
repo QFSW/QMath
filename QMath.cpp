@@ -594,7 +594,10 @@ Expression* Multiply::simplify()
 		if (*leftSim == *rightSim)
 		{
 			delete rightSim;
-			return new Exponent(leftSim, 2);
+			Exponent* result = new Exponent(leftSim, 2);
+			Expression* resultSim = result->simplify();
+			delete result;
+			return resultSim;
 		}
 
 		Expression* result = accumulateExponentIndicies<Multiply, Add>(leftSim, rightSim);
@@ -737,7 +740,25 @@ Expression* Exponent::simplify()
 			if (rightOperand->evaluate() == 0) { return new Number(1); }
 			else if (rightOperand->evaluate() == 1) { return leftOperand->simplify(); }
 		}
-		return new Exponent(leftOperand->simplify(), rightOperand->simplify());
+
+		Expression* leftSim = leftOperand->simplify();
+		Expression* rightSim = rightOperand->simplify();
+
+		if (typeid(*leftSim) == typeid(Exponent))
+		{
+			Exponent* leftExp = (Exponent*)leftSim;
+			Multiply* newIndex = new Multiply(leftExp->getRightOperand()->copyTree(), rightSim);
+			Expression* newIndexSim = newIndex->simplify();
+			Exponent* result = new Exponent(leftExp->getLeftOperand()->copyTree(), newIndexSim);
+			Expression* resultSim = result->simplify();
+
+			delete leftExp;
+			delete newIndex;
+			delete result;
+			return resultSim;
+		}
+
+		return new Exponent(leftSim, rightSim);
 	}
 }
 
