@@ -630,16 +630,12 @@ std::string Divide::toString(bool showParentheses)
 
 Expression* Divide::simplify()
 {
-	Expression* leftSim = leftOperand->simplify();
-	Expression* rightSim = rightOperand->simplify();
-	if (leftSim->isConstant() && rightSim->isConstant())
-	{
-		delete leftSim;
-		delete rightSim;
-		return new Number(evaluate());
-	}
+	if (leftOperand->isConstant() && rightOperand->isConstant()) { return new Number(evaluate()); }
 	else
 	{
+		Expression* leftSim = leftOperand->simplify();
+		Expression* rightSim = rightOperand->simplify();
+
 		if (leftSim->isConstant() && rightSim->evaluate() == 0)
 		{
 			delete leftSim;
