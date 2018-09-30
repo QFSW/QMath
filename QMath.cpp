@@ -146,7 +146,7 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
             size_t index = -1;
             do
             {
-				index = parseInput.find(table[i].name, index + 1);
+				index = parseInput.rfind(table[i].name, index - 1);
 				if (index != std::string::npos && determineScopeDepth(parseInput, (int)index) == 0)
 				{
 					switch (table[i].type)
