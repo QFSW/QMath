@@ -856,7 +856,28 @@ Expression* Log::simplify()
         
         if (operandsEqual) { operandsEqual = leftOperand->evaluate() == rightOperand->evaluate(); }
         if (operandsEqual) { return new Number(1); }
-        else { return copyTree(); }
+        else
+		{
+			Expression* leftSim = leftOperand->simplify();
+			Expression* rightSim = rightOperand->simplify();
+
+			if (typeid(*rightSim) == typeid(Exponent))
+			{
+				Exponent* rightExp = (Exponent*)rightSim;
+				if (*leftSim == *(rightExp->getLeftOperand()))
+				{
+					Expression* result = rightExp->getRightOperand()->copyTree();
+					Expression* resultSim = result->simplify();
+
+					delete leftSim;
+					delete rightSim;
+					delete result;
+					return resultSim;
+				}
+			}
+
+			return new Log(leftSim, rightSim);
+		}
     }
 }
 
