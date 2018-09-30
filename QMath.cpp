@@ -645,7 +645,7 @@ Expression* Divide::simplify()
 			delete rightSim;
 			return new Number(0);
 		}
-		if (leftSim->isConstant() && rightSim->evaluate() == 1)
+		if (rightSim->isConstant() && rightSim->evaluate() == 1)
 		{
 			delete rightSim;
 			return leftSim;
