@@ -45,21 +45,21 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
     if (parseInput.size() > 1 && !isNumber(parseInput))
     {
         const ExpressionData table[] = { ExpressionData("+", ExpressionData::Type::Operator),
-                                    ExpressionData("-", ExpressionData::Type::Operator),
-                                    ExpressionData("*", ExpressionData::Type::Operator),
-                                    ExpressionData("/", ExpressionData::Type::Operator),
-                                    ExpressionData("^", ExpressionData::Type::Operator),
-                                    ExpressionData("sinc", ExpressionData::Type::Function),
-									ExpressionData("cosec", ExpressionData::Type::Function),
-                                    ExpressionData("sec", ExpressionData::Type::Function),
-									ExpressionData("csc", ExpressionData::Type::Function),
-                                    ExpressionData("cotan", ExpressionData::Type::Function),
-									ExpressionData("cot", ExpressionData::Type::Function),
-                                    ExpressionData("sin", ExpressionData::Type::Function),
-                                    ExpressionData("cos", ExpressionData::Type::Function),
-                                    ExpressionData("tan", ExpressionData::Type::Function),
-                                    ExpressionData("ln", ExpressionData::Type::Function),
-                                    ExpressionData("log", ExpressionData::Type::Function)};
+										 ExpressionData("-", ExpressionData::Type::Operator),
+										 ExpressionData("*", ExpressionData::Type::Operator),
+										 ExpressionData("/", ExpressionData::Type::Operator),
+										 ExpressionData("^", ExpressionData::Type::Operator),
+										 ExpressionData("sinc", ExpressionData::Type::Function),
+										 ExpressionData("cosec", ExpressionData::Type::Function),
+										 ExpressionData("sec", ExpressionData::Type::Function),
+										 ExpressionData("csc", ExpressionData::Type::Function),
+										 ExpressionData("cotan", ExpressionData::Type::Function),
+										 ExpressionData("cot", ExpressionData::Type::Function),
+										 ExpressionData("sin", ExpressionData::Type::Function),
+										 ExpressionData("cos", ExpressionData::Type::Function),
+										 ExpressionData("tan", ExpressionData::Type::Function),
+										 ExpressionData("ln", ExpressionData::Type::Function),
+										 ExpressionData("log", ExpressionData::Type::Function)};
             
 		if (validateAndRectify)
 		{
