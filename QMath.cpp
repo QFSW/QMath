@@ -758,6 +758,21 @@ Expression* Exponent::simplify()
 			return resultSim;
 		}
 
+		if (typeid(*rightSim) == typeid(Log))
+		{
+			Log* rightLog = (Log*)rightSim;
+			if (*leftSim == *(rightLog->getLeftOperand()))
+			{
+				Expression* result = rightLog->getRightOperand()->copyTree();
+				Expression* resultSim = result->simplify();
+
+				delete leftSim;
+				delete rightSim;
+				delete result;
+				return resultSim;
+			}
+		}
+
 		return new Exponent(leftSim, rightSim);
 	}
 }
