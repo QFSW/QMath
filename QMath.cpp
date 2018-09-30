@@ -379,6 +379,37 @@ Expression* Operator::factoriseLinear(Expression *left, Expression *right)
 	return new T(left->copyTree(), right->copyTree());
 }
 
+template<typename T1, typename T2>
+Expression* Operator::accumulateExponentIndicies(Expression *left, Expression *right)
+{
+	if (typeid(*left) == typeid(Exponent) || typeid(*right) == typeid(Exponent))
+	{
+		Exponent* leftExp = typeid(*left) == typeid(Exponent) ? (Exponent*)left->copyTree() : new Exponent(left->copyTree(), 1);
+		Exponent* rightExp = typeid(*right) == typeid(Exponent) ? (Exponent*)right->copyTree() : new Exponent(right->copyTree(), 1);
+		if (*(leftExp->getLeftOperand()) == *(rightExp->getLeftOperand()))
+		{
+
+			T2* newExp = new T2(leftExp->getRightOperand()->copyTree(), rightExp->getRightOperand()->copyTree());
+			Expression* newExpSim = newExp->simplify();
+
+			Exponent* result = new Exponent(leftExp->getLeftOperand()->copyTree(), newExpSim);
+			Expression* resultSim = result->simplify();
+
+			delete newExp;
+			delete result;
+			delete leftExp;
+			delete rightExp;
+
+			return resultSim;
+		}
+
+		delete leftExp;
+		delete rightExp;
+	}
+
+	return new T1(left->copyTree(), right->copyTree());
+}
+
 
 double Add::evaluate() { return leftOperand->evaluate() + rightOperand->evaluate(); }
 
@@ -559,67 +590,17 @@ Expression* Multiply::simplify()
                 return leftSim;
             }
         }
-		if (typeid(*leftSim) == typeid(Exponent))
-		{
-			Exponent* leftExp = (Exponent*)leftSim;
-			if (typeid(*rightSim) == typeid(Exponent))
-			{
-				Exponent* rightExp = (Exponent*)rightSim;
-				if (*(leftExp->getLeftOperand()) == *(rightExp->getLeftOperand()))
-				{
-					Add* index = new Add(leftExp->getRightOperand()->copyTree(), rightExp->getRightOperand()->copyTree());
-					Expression* indexSim = index->simplify();
-					Expression* result = new Exponent(leftExp->getLeftOperand()->copyTree(), indexSim);
-					Expression* resultSim = result->simplify();
-
-					delete leftSim;
-					delete rightSim;
-					delete index;
-					delete result;
-
-					return resultSim;
-				}
-			}
-			else if (*(leftExp->getLeftOperand()) == *rightSim)
-			{
-				Add* index = new Add(leftExp->getRightOperand()->copyTree(), 1);
-				Expression* indexSim = index->simplify();
-				Expression* result = new Exponent(leftExp->getLeftOperand()->copyTree(), indexSim);
-				Expression* resultSim = result->simplify();
-
-				delete leftSim;
-				delete rightSim;
-				delete index;
-				delete result;
-
-				return resultSim;
-			}
-		}
-		else if (typeid(*rightSim) == typeid(Exponent))
-		{
-			Exponent* rightExp = (Exponent*)rightSim;
-			if (*(rightExp->getLeftOperand()) == *leftSim)
-			{
-				Add* index = new Add(rightExp->getRightOperand()->copyTree(), 1);
-				Expression* indexSim = index->simplify();
-				Expression* result = new Exponent(rightExp->getLeftOperand()->copyTree(), indexSim);
-				Expression* resultSim = result->simplify();
-
-				delete leftSim;
-				delete rightSim;
-				delete index;
-				delete result;
-
-				return resultSim;
-			}
-		}
+		
 		if (*leftSim == *rightSim)
 		{
 			delete rightSim;
 			return new Exponent(leftSim, 2);
 		}
 
-		return new Multiply(leftSim, rightSim);
+		Expression* result = accumulateExponentIndicies<Multiply, Add>(leftSim, rightSim);
+		delete leftSim;
+		delete rightSim;
+		return result;
 	}
 }
 
@@ -676,7 +657,11 @@ Expression* Divide::simplify()
 			delete rightSim;
 			return new Number(1);
 		}
-		else { return new Divide(leftSim, rightSim); }
+		
+		Expression* result = accumulateExponentIndicies<Divide, Subtract>(leftSim, rightSim);
+		delete leftSim;
+		delete rightSim;
+		return result;
 	}
 }
 

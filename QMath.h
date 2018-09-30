@@ -70,6 +70,9 @@ namespace QMath
 		template<typename T>
 		static Expression* factoriseLinear(Expression *left, Expression *right);
 
+		template<typename T1, typename T2>
+		static Expression* accumulateExponentIndicies(Expression *left, Expression *right);
+
 		Expression* getLeftOperand();
 		Expression* getRightOperand();
 
