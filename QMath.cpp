@@ -51,6 +51,7 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("^", ExpressionData::Type::Operator),
 										 ExpressionData("sinh", ExpressionData::Type::Function),
 										 ExpressionData("cosh", ExpressionData::Type::Function),
+										 ExpressionData("tanh", ExpressionData::Type::Function),
 										 ExpressionData("sinc", ExpressionData::Type::Function),
 										 ExpressionData("cosec", ExpressionData::Type::Function),
 										 ExpressionData("sec", ExpressionData::Type::Function),
@@ -225,6 +226,7 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
     else if (operatorData.name == "tan") { return new Tan(operand); }
 	else if (operatorData.name == "sinh") { return new Sinh(operand); }
 	else if (operatorData.name == "cosh") { return new Cosh(operand); }
+	else if (operatorData.name == "tanh") { return new Tanh(operand); }
     else if (operatorData.name == "sec") { return new Exponent(new Cos(operand), new Number(-1)); }
     else if (operatorData.name == "cosec") { return new Exponent(new Sin(operand), new Number(-1)); }
 	else if (operatorData.name == "csc") { return new Exponent(new Sin(operand), new Number(-1)); }
@@ -1092,6 +1094,21 @@ Multiply* Cosh::differentiate(char diffOperator)
 Cosh* Cosh::simplify() { return new Cosh(operand->simplify()); }
 
 std::string Cosh::toString(bool showParentheses) { return "cosh(" + operand->toString() + ")"; }
+
+Tanh* Tanh::copyTree() { return new Tanh(operand->copyTree()); }
+
+double Tanh::evaluate() { return std::tanh(operand->evaluate()); }
+
+Multiply* Tanh::differentiate(char diffOperator)
+{
+	Expression* left = operand->differentiate(diffOperator);
+	Exponent* right = new Exponent(new Cosh(operand->copyTree()), new Number(-2));
+	return new Multiply(left, right);
+}
+
+Tanh* Tanh::simplify() { return new Tanh(operand->simplify()); }
+
+std::string Tanh::toString(bool showParentheses) { return "tanh(" + operand->toString() + ")"; }
 
 Differential::Differential(Expression *left, Expression *right, unsigned char order) : Operator::Operator(left, right)
 {

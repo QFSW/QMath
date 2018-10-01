@@ -313,4 +313,16 @@ namespace QMath
 		Multiply* differentiate(char diffOperator);
 		Cosh* simplify();
 	};
+
+	class Tanh : public Func
+	{
+	public:
+		using Func::Func;
+
+		std::string toString(bool showParentheses = false);
+		Tanh* copyTree();
+		double evaluate();
+		Multiply* differentiate(char diffOperator);
+		Tanh* simplify();
+	};
 }
