@@ -722,9 +722,9 @@ Multiply* Exponent::differentiate(char diffOperator)
         }
         else
         {
-            Multiply* rightTop = new Multiply(rightOperand->copyTree(), leftOperand->differentiate(diffOperator));
-            Divide* right = new Divide(rightTop, rightOperand->differentiate(diffOperator));
-            Multiply* left = new Multiply(rightOperand->differentiate(diffOperator), new Log(new Constant('e'), rightOperand->copyTree()));
+            Multiply* leftTop = new Multiply(rightOperand->copyTree(), leftOperand->differentiate(diffOperator));
+            Divide* left = new Divide(leftTop, leftOperand->copyTree());
+            Multiply* right = new Multiply(rightOperand->differentiate(diffOperator), new Log(new Constant('e'), leftOperand->copyTree()));
             Add* inner = new Add(left, right);
             return new Multiply(copyTree(), inner);
         }
