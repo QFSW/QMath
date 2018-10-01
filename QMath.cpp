@@ -53,10 +53,14 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("cosh", ExpressionData::Type::Function),
 										 ExpressionData("tanh", ExpressionData::Type::Function),
 										 ExpressionData("sinc", ExpressionData::Type::Function),
+										 ExpressionData("cosech", ExpressionData::Type::Function),
 										 ExpressionData("cosec", ExpressionData::Type::Function),
+										 ExpressionData("sech", ExpressionData::Type::Function),
 										 ExpressionData("sec", ExpressionData::Type::Function),
 										 ExpressionData("csc", ExpressionData::Type::Function),
+										 ExpressionData("cotanh", ExpressionData::Type::Function),
 										 ExpressionData("cotan", ExpressionData::Type::Function),
+									     ExpressionData("coth", ExpressionData::Type::Function),
 										 ExpressionData("cot", ExpressionData::Type::Function),
 										 ExpressionData("sin", ExpressionData::Type::Function),
 										 ExpressionData("cos", ExpressionData::Type::Function),
@@ -232,6 +236,10 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
 	else if (operatorData.name == "csc") { return new Exponent(new Sin(operand), new Number(-1)); }
     else if (operatorData.name == "cotan") { return new Exponent(new Tan(operand), new Number(-1)); }
 	else if (operatorData.name == "cot") { return new Exponent(new Tan(operand), new Number(-1)); }
+	else if (operatorData.name == "sech") { return new Exponent(new Cosh(operand), new Number(-1)); }
+	else if (operatorData.name == "cosech") { return new Exponent(new Sinh(operand), new Number(-1)); }
+	else if (operatorData.name == "cotanh") { return new Exponent(new Tanh(operand), new Number(-1)); }
+	else if (operatorData.name == "coth") { return new Exponent(new Tanh(operand), new Number(-1)); }
     else if (operatorData.name == "sinc") { return new Divide(new Sin(operand), operand->copyTree()); }
     else if (operatorData.name == "ln") { return new Log(new Constant('e'), operand); }
     else if (operatorData.name == "log") { return new Log(new Number(10), operand); }
