@@ -289,4 +289,28 @@ namespace QMath
         Multiply* differentiate(char diffOperator);
         Tan* simplify();
     };
+
+	class Sinh : public Func
+	{
+	public:
+		using Func::Func;
+
+		std::string toString(bool showParentheses = false);
+		Sinh* copyTree();
+		double evaluate();
+		Multiply* differentiate(char diffOperator);
+		Sinh* simplify();
+	};
+
+	class Cosh : public Func
+	{
+	public:
+		using Func::Func;
+
+		std::string toString(bool showParentheses = false);
+		Cosh* copyTree();
+		double evaluate();
+		Multiply* differentiate(char diffOperator);
+		Cosh* simplify();
+	};
 }

@@ -49,6 +49,8 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("*", ExpressionData::Type::Operator),
 										 ExpressionData("/", ExpressionData::Type::Operator),
 										 ExpressionData("^", ExpressionData::Type::Operator),
+										 ExpressionData("sinh", ExpressionData::Type::Function),
+										 ExpressionData("cosh", ExpressionData::Type::Function),
 										 ExpressionData("sinc", ExpressionData::Type::Function),
 										 ExpressionData("cosec", ExpressionData::Type::Function),
 										 ExpressionData("sec", ExpressionData::Type::Function),
@@ -221,6 +223,8 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
     if (operatorData.name == "sin") { return new Sin(operand); }
     else if (operatorData.name == "cos") { return new Cos(operand); }
     else if (operatorData.name == "tan") { return new Tan(operand); }
+	else if (operatorData.name == "sinh") { return new Sinh(operand); }
+	else if (operatorData.name == "cosh") { return new Cosh(operand); }
     else if (operatorData.name == "sec") { return new Exponent(new Cos(operand), new Number(-1)); }
     else if (operatorData.name == "cosec") { return new Exponent(new Sin(operand), new Number(-1)); }
 	else if (operatorData.name == "csc") { return new Exponent(new Sin(operand), new Number(-1)); }
@@ -1059,6 +1063,35 @@ Tan* Tan::simplify() { return new Tan(operand->simplify()); }
 
 std::string Tan::toString(bool showParentheses) { return "tan(" + operand->toString() + ")"; }
 
+Sinh* Sinh::copyTree() { return new Sinh(operand->copyTree()); }
+
+double Sinh::evaluate() { return std::sinh(operand->evaluate()); }
+
+Multiply* Sinh::differentiate(char diffOperator)
+{
+	Expression* left = operand->differentiate(diffOperator);
+	Cosh* right = new Cosh(operand->copyTree());
+	return new Multiply(left, right);
+}
+
+Sinh* Sinh::simplify() { return new Sinh(operand->simplify()); }
+
+std::string Sinh::toString(bool showParentheses) { return "sinh(" + operand->toString() + ")"; }
+
+Cosh* Cosh::copyTree() { return new Cosh(operand->copyTree()); }
+
+double Cosh::evaluate() { return std::cosh(operand->evaluate()); }
+
+Multiply* Cosh::differentiate(char diffOperator)
+{
+	Expression* left = operand->differentiate(diffOperator);
+	Sinh* right = new Sinh(operand->copyTree());
+	return new Multiply(left, right);
+}
+
+Cosh* Cosh::simplify() { return new Cosh(operand->simplify()); }
+
+std::string Cosh::toString(bool showParentheses) { return "cosh(" + operand->toString() + ")"; }
 
 Differential::Differential(Expression *left, Expression *right, unsigned char order) : Operator::Operator(left, right)
 {
