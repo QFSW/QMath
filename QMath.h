@@ -337,4 +337,16 @@ namespace QMath
 		Divide* differentiate(char diffOperator);
 		Arcsin* simplify();
 	};
+
+	class Arccos : public Func
+	{
+	public:
+		using Func::Func;
+
+		std::string toString(bool showParentheses = false);
+		Arccos* copyTree();
+		double evaluate();
+		Divide* differentiate(char diffOperator);
+		Arccos* simplify();
+	};
 }

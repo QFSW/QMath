@@ -52,6 +52,7 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("invsqrt", ExpressionData::Type::Function),
 										 ExpressionData("sqrt", ExpressionData::Type::Function),
 										 ExpressionData("arcsin", ExpressionData::Type::Function),
+										 ExpressionData("arccos", ExpressionData::Type::Function),
 										 ExpressionData("sinh", ExpressionData::Type::Function),
 										 ExpressionData("cosh", ExpressionData::Type::Function),
 										 ExpressionData("tanh", ExpressionData::Type::Function),
@@ -254,6 +255,7 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
     if (operatorData.name == "sin") { return new Sin(operand); }
 	else if (operatorData.name == "arcsin") { return new Arcsin(operand); }
     else if (operatorData.name == "cos") { return new Cos(operand); }
+	else if (operatorData.name == "arccos") { return new Arccos(operand); }
     else if (operatorData.name == "tan") { return new Tan(operand); }
 	else if (operatorData.name == "sinh") { return new Sinh(operand); }
 	else if (operatorData.name == "cosh") { return new Cosh(operand); }
@@ -1162,6 +1164,22 @@ Divide* Arcsin::differentiate(char diffOperator)
 Arcsin* Arcsin::simplify() { return new Arcsin(operand->simplify()); }
 
 std::string Arcsin::toString(bool showParentheses) { return "arcsin(" + operand->toString() + ")"; }
+
+Arccos* Arccos::copyTree() { return new Arccos(operand->copyTree()); }
+
+double Arccos::evaluate() { return std::acos(operand->evaluate()); }
+
+Divide* Arccos::differentiate(char diffOperator)
+{
+	Expression* top = new Multiply(-1, operand->differentiate());
+	Expression* bottomInner = new Subtract(1, new Exponent(operand->copyTree(), 2));
+	Expression* bottom = new Exponent(bottomInner, 0.5f);
+	return new Divide(top, bottom);
+}
+
+Arccos* Arccos::simplify() { return new Arccos(operand->simplify()); }
+
+std::string Arccos::toString(bool showParentheses) { return "arccos(" + operand->toString() + ")"; }
 
 Differential::Differential(Expression *left, Expression *right, unsigned char order) : Operator::Operator(left, right)
 {
