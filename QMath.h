@@ -17,7 +17,7 @@ namespace QMath
 		virtual bool operator== (const Expression &b) = 0;
 		virtual std::string toString(bool showParentheses = false) = 0;
 		virtual Expression* copyTree() = 0;
-		virtual double evaluate() = 0;
+		virtual const double evaluate() = 0;
 		virtual Expression* simplify();
 		virtual Expression* differentiate(char diffOperator = 'x') = 0;
 		virtual bool isConstant() = 0;
@@ -88,7 +88,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Add* copyTree();
-		double evaluate();
+		double const evaluate();
 		Add* differentiate(char diffOperator);
 		Expression* simplify();
 		unsigned char precedence();
@@ -101,7 +101,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Subtract* copyTree();
-		double evaluate();
+		double const evaluate();
 		Subtract* differentiate(char diffOperator);
 		Expression* simplify();
 		unsigned char precedence();
@@ -115,7 +115,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Multiply* copyTree();
-		double evaluate();
+		double const evaluate();
 		Add* differentiate(char diffOperator);
 		Expression* simplify();
 		unsigned char precedence();
@@ -129,7 +129,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Divide* copyTree();
-		double evaluate();
+		double const evaluate();
 		Divide* differentiate(char diffOperator);
 		Expression* simplify();
 		unsigned char precedence();
@@ -143,7 +143,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Exponent* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Expression* simplify();
 		unsigned char precedence();
@@ -158,7 +158,7 @@ namespace QMath
         
         std::string toString(bool showParentheses = false);
         Differential* copyTree();
-        double evaluate();
+        double const evaluate();
         Expression* differentiate(char diffOperator);
         unsigned char precedence();
         bool isCommutative();
@@ -174,7 +174,7 @@ namespace QMath
         
         std::string toString(bool showParentheses = false);
         Log* copyTree();
-        double evaluate();
+        double const evaluate();
         Expression* differentiate(char diffOperator);
         unsigned char precedence();
         bool isCommutative();
@@ -195,7 +195,7 @@ namespace QMath
 		bool operator== (const Expression &b);
 		std::string toString(bool showParentheses = false);
 		Number* copyTree();
-		double evaluate();
+		double const evaluate();
 		bool isConstant();
 		Number* differentiate(char diffOperator);
 		bool isAtomic();
@@ -215,7 +215,7 @@ namespace QMath
 		bool operator== (const Expression &b);
 		std::string toString(bool showParentheses = false);
 		Variable* copyTree();
-		double evaluate();
+		double const evaluate();
 		bool isConstant();
 		Expression* differentiate(char diffOperator);
 		char charID();
@@ -261,7 +261,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Sin* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Sin* simplify();
 	};
@@ -273,7 +273,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Cos* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Cos* simplify();
 	};
@@ -285,7 +285,7 @@ namespace QMath
         
         std::string toString(bool showParentheses = false);
         Tan* copyTree();
-        double evaluate();
+        double const evaluate();
         Multiply* differentiate(char diffOperator);
         Tan* simplify();
     };
@@ -297,7 +297,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Sinh* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Sinh* simplify();
 	};
@@ -309,7 +309,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Cosh* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Cosh* simplify();
 	};
@@ -321,7 +321,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Tanh* copyTree();
-		double evaluate();
+		double const evaluate();
 		Multiply* differentiate(char diffOperator);
 		Tanh* simplify();
 	};
@@ -333,7 +333,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Arcsin* copyTree();
-		double evaluate();
+		double const evaluate();
 		Divide* differentiate(char diffOperator);
 		Arcsin* simplify();
 	};
@@ -345,7 +345,7 @@ namespace QMath
 
 		std::string toString(bool showParentheses = false);
 		Arccos* copyTree();
-		double evaluate();
+		double const evaluate();
 		Divide* differentiate(char diffOperator);
 		Arccos* simplify();
 	};

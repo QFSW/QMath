@@ -456,7 +456,7 @@ Expression* Operator::accumulateExponentIndicies(Expression *left, Expression *r
 }
 
 
-double Add::evaluate() { return leftOperand->evaluate() + rightOperand->evaluate(); }
+const double Add::evaluate() { return leftOperand->evaluate() + rightOperand->evaluate(); }
 
 Add* Add::differentiate(char diffOperator) { return new Add(leftOperand->differentiate(diffOperator), rightOperand->differentiate(diffOperator)); }
 
@@ -508,7 +508,7 @@ unsigned char Add::precedence() { return 1; }
 
 Subtract* Subtract::copyTree() { return new Subtract(leftOperand->copyTree(), rightOperand->copyTree()); }
 
-double Subtract::evaluate() { return leftOperand->evaluate() - rightOperand->evaluate(); }
+const double Subtract::evaluate() { return leftOperand->evaluate() - rightOperand->evaluate(); }
 
 Subtract* Subtract::differentiate(char diffOperator) { return new Subtract(leftOperand->differentiate(diffOperator), rightOperand->differentiate(diffOperator)); }
 
@@ -561,7 +561,7 @@ bool Subtract::isCommutative() { return false; }
 
 Multiply* Multiply::copyTree() { return new Multiply(leftOperand->copyTree(), rightOperand->copyTree()); }
 
-double Multiply::evaluate() { return leftOperand->evaluate() * rightOperand->evaluate(); }
+const double Multiply::evaluate() { return leftOperand->evaluate() * rightOperand->evaluate(); }
 
 Add* Multiply::differentiate(char diffOperator)
 {
@@ -657,7 +657,7 @@ unsigned char Multiply::precedence() { return 2; }
 
 Divide* Divide::copyTree() { return new Divide(leftOperand->copyTree(), rightOperand->copyTree()); }
 
-double Divide::evaluate() { return leftOperand->evaluate() / rightOperand->evaluate(); }
+const double Divide::evaluate() { return leftOperand->evaluate() / rightOperand->evaluate(); }
 
 Divide* Divide::differentiate(char diffOperator)
 {
@@ -716,7 +716,7 @@ bool Divide::isCommutative() { return false; }
 
 Exponent* Exponent::copyTree() { return new Exponent(leftOperand->copyTree(), rightOperand->copyTree()); }
 
-double Exponent::evaluate() { return std::pow(leftOperand->evaluate(), rightOperand->evaluate()); }
+const double Exponent::evaluate() { return std::pow(leftOperand->evaluate(), rightOperand->evaluate()); }
 
 Multiply* Exponent::differentiate(char diffOperator)
 {
@@ -853,7 +853,7 @@ std::string Log::toString(bool showParentheses)
 
 Log* Log::copyTree() { return new Log(leftOperand->copyTree(), rightOperand->copyTree()); }
 
-double Log::evaluate()
+const double Log::evaluate()
 {
     if (isNatural) { return std::log(rightOperand->evaluate()); }
     else if (is10) { return std::log10(rightOperand->evaluate()); }
@@ -941,7 +941,7 @@ bool Number::operator== (const Expression &b)
 	}
 }
 
-double Number::evaluate() { return value; }
+const double Number::evaluate() { return value; }
 
 bool Number::isConstant() { return true; }
 
@@ -976,7 +976,7 @@ bool Variable::operator== (const Expression &b)
 	}
 }
 
-double Variable::evaluate() { return value; }
+const double Variable::evaluate() { return value; }
 
 bool Variable::isConstant() { return false; }
 
@@ -1059,7 +1059,7 @@ unsigned char Func::precedence() { return 4; }
 
 Sin* Sin::copyTree() { return new Sin(operand->copyTree()); }
 
-double Sin::evaluate() { return std::sin(operand->evaluate()); }
+const double Sin::evaluate() { return std::sin(operand->evaluate()); }
 
 Multiply* Sin::differentiate(char diffOperator)
 {
@@ -1075,7 +1075,7 @@ std::string Sin::toString(bool showParentheses) { return "sin(" + operand->toStr
 
 Cos* Cos::copyTree() { return new Cos(operand->copyTree()); }
 
-double Cos::evaluate() { return std::cos(operand->evaluate()); }
+const double Cos::evaluate() { return std::cos(operand->evaluate()); }
 
 Multiply* Cos::differentiate(char diffOperator)
 {
@@ -1091,7 +1091,7 @@ std::string Cos::toString(bool showParentheses) { return "cos(" + operand->toStr
 
 Tan* Tan::copyTree() { return new Tan(operand->copyTree()); }
 
-double Tan::evaluate() { return std::tan(operand->evaluate()); }
+const double Tan::evaluate() { return std::tan(operand->evaluate()); }
 
 Multiply* Tan::differentiate(char diffOperator)
 {
@@ -1106,7 +1106,7 @@ std::string Tan::toString(bool showParentheses) { return "tan(" + operand->toStr
 
 Sinh* Sinh::copyTree() { return new Sinh(operand->copyTree()); }
 
-double Sinh::evaluate() { return std::sinh(operand->evaluate()); }
+const double Sinh::evaluate() { return std::sinh(operand->evaluate()); }
 
 Multiply* Sinh::differentiate(char diffOperator)
 {
@@ -1121,7 +1121,7 @@ std::string Sinh::toString(bool showParentheses) { return "sinh(" + operand->toS
 
 Cosh* Cosh::copyTree() { return new Cosh(operand->copyTree()); }
 
-double Cosh::evaluate() { return std::cosh(operand->evaluate()); }
+const double Cosh::evaluate() { return std::cosh(operand->evaluate()); }
 
 Multiply* Cosh::differentiate(char diffOperator)
 {
@@ -1136,7 +1136,7 @@ std::string Cosh::toString(bool showParentheses) { return "cosh(" + operand->toS
 
 Tanh* Tanh::copyTree() { return new Tanh(operand->copyTree()); }
 
-double Tanh::evaluate() { return std::tanh(operand->evaluate()); }
+const double Tanh::evaluate() { return std::tanh(operand->evaluate()); }
 
 Multiply* Tanh::differentiate(char diffOperator)
 {
@@ -1151,7 +1151,7 @@ std::string Tanh::toString(bool showParentheses) { return "tanh(" + operand->toS
 
 Arcsin* Arcsin::copyTree() { return new Arcsin(operand->copyTree()); }
 
-double Arcsin::evaluate() { return std::asin(operand->evaluate()); }
+const double Arcsin::evaluate() { return std::asin(operand->evaluate()); }
 
 Divide* Arcsin::differentiate(char diffOperator)
 {
@@ -1167,7 +1167,7 @@ std::string Arcsin::toString(bool showParentheses) { return "arcsin(" + operand-
 
 Arccos* Arccos::copyTree() { return new Arccos(operand->copyTree()); }
 
-double Arccos::evaluate() { return std::acos(operand->evaluate()); }
+const double Arccos::evaluate() { return std::acos(operand->evaluate()); }
 
 Divide* Arccos::differentiate(char diffOperator)
 {
@@ -1191,7 +1191,7 @@ Differential* Differential::copyTree()
     return new Differential(leftOperand->copyTree(), rightOperand->copyTree(), order);
 }
 
-double Differential::evaluate() { throw "Not implemented"; }
+const double Differential::evaluate() { throw "Not implemented"; }
 
 Expression* Differential::differentiate(char diffOperator)
 {
