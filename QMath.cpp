@@ -49,6 +49,8 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("*", ExpressionData::Type::Operator),
 										 ExpressionData("/", ExpressionData::Type::Operator),
 										 ExpressionData("^", ExpressionData::Type::Operator),
+										 ExpressionData("invsqrt", ExpressionData::Type::Function),
+										 ExpressionData("sqrt", ExpressionData::Type::Function),
 										 ExpressionData("sinh", ExpressionData::Type::Function),
 										 ExpressionData("cosh", ExpressionData::Type::Function),
 										 ExpressionData("tanh", ExpressionData::Type::Function),
@@ -243,6 +245,8 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
     else if (operatorData.name == "sinc") { return new Divide(new Sin(operand), operand->copyTree()); }
     else if (operatorData.name == "ln") { return new Log(new Constant('e'), operand); }
     else if (operatorData.name == "log") { return new Log(new Number(10), operand); }
+	else if (operatorData.name == "sqrt") { return new Exponent(operand, 0.5f); }
+	else if (operatorData.name == "invsqrt") { return new Exponent(operand, -0.5f); }
     else { throw "Not implemented"; }
 }
 
