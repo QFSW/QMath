@@ -325,4 +325,16 @@ namespace QMath
 		Multiply* differentiate(char diffOperator);
 		Tanh* simplify();
 	};
+
+	class Arcsin : public Func
+	{
+	public:
+		using Func::Func;
+
+		std::string toString(bool showParentheses = false);
+		Arcsin* copyTree();
+		double evaluate();
+		Divide* differentiate(char diffOperator);
+		Arcsin* simplify();
+	};
 }

@@ -51,6 +51,7 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 										 ExpressionData("^", ExpressionData::Type::Operator),
 										 ExpressionData("invsqrt", ExpressionData::Type::Function),
 										 ExpressionData("sqrt", ExpressionData::Type::Function),
+										 ExpressionData("arcsin", ExpressionData::Type::Function),
 										 ExpressionData("sinh", ExpressionData::Type::Function),
 										 ExpressionData("cosh", ExpressionData::Type::Function),
 										 ExpressionData("tanh", ExpressionData::Type::Function),
@@ -88,31 +89,54 @@ Expression* Expression::parse(const std::string& input, bool validateAndRectify)
 							{
 								if (parseInput.substr(searchOffset, searchSize) == table[j].name)
 								{
-									if (table[j].type == ExpressionData::Operator)
+									bool isSubFunction = false;
+									for (int k = 0; k < sizeof(table) / sizeof(table[0]); ++k)
 									{
-										operatorFound = true;
-										offset = 0;
-										j = sizeof(table) / sizeof(table[0]);
-										break;
-									}
-									else
-									{
-										offset = -searchSize;
-										for (int k = 0; k < sizeof(table) / sizeof(table[0]); ++k)
+										int subSearchSize = table[k].name.size();
+										int subSearchOffset = i - subSearchSize;
+										if (subSearchSize > searchSize)
 										{
-											int searchIndex = i - searchSize - 1;
-											bool validSearch = searchIndex >= 0 && searchIndex < parseInput.size();
-											if (validSearch && table[k].type == ExpressionData::Operator && parseInput[searchIndex] == table[k].name[0])
+											if (subSearchOffset >= 0)
 											{
-												operatorFound = true;
-												k = j = sizeof(table) / sizeof(table[0]);
-												break;
+												if (j != k && parseInput.substr(subSearchOffset, subSearchSize) == table[k].name)
+												{
+													k = sizeof(table) / sizeof(table[0]);
+													isSubFunction = true;
+													break;
+												}
+											}
+										}
+									}
+
+									if (!isSubFunction)
+									{
+										if (table[j].type == ExpressionData::Operator)
+										{
+											operatorFound = true;
+											offset = 0;
+											j = sizeof(table) / sizeof(table[0]);
+											break;
+										}
+										else
+										{
+											offset = -searchSize;
+											for (int k = 0; k < sizeof(table) / sizeof(table[0]); ++k)
+											{
+												int searchIndex = i - searchSize - 1;
+												bool validSearch = searchIndex >= 0 && searchIndex < parseInput.size();
+												if (validSearch && table[k].type == ExpressionData::Operator && parseInput[searchIndex] == table[k].name[0])
+												{
+													operatorFound = true;
+													k = j = sizeof(table) / sizeof(table[0]);
+													break;
+												}
 											}
 										}
 									}
 								}
 							}
 						}
+
 						int insertionIndex = i + offset;
 						if (!operatorFound)
 						{
@@ -228,6 +252,7 @@ Expression* Expression::parseFunction(const std::string &inputRight, const Expre
     Expression *operand = parse(inputRight.substr(0, scopeEnd), false);
     
     if (operatorData.name == "sin") { return new Sin(operand); }
+	else if (operatorData.name == "arcsin") { return new Arcsin(operand); }
     else if (operatorData.name == "cos") { return new Cos(operand); }
     else if (operatorData.name == "tan") { return new Tan(operand); }
 	else if (operatorData.name == "sinh") { return new Sinh(operand); }
@@ -1121,6 +1146,22 @@ Multiply* Tanh::differentiate(char diffOperator)
 Tanh* Tanh::simplify() { return new Tanh(operand->simplify()); }
 
 std::string Tanh::toString(bool showParentheses) { return "tanh(" + operand->toString() + ")"; }
+
+Arcsin* Arcsin::copyTree() { return new Arcsin(operand->copyTree()); }
+
+double Arcsin::evaluate() { return std::asin(operand->evaluate()); }
+
+Divide* Arcsin::differentiate(char diffOperator)
+{
+	Expression* top = operand->differentiate();
+	Expression* bottomInner = new Subtract(1, new Exponent(operand->copyTree(), 2));
+	Expression* bottom = new Exponent(bottomInner, 0.5f);
+	return new Divide(top, bottom);
+}
+
+Arcsin* Arcsin::simplify() { return new Arcsin(operand->simplify()); }
+
+std::string Arcsin::toString(bool showParentheses) { return "arcsin(" + operand->toString() + ")"; }
 
 Differential::Differential(Expression *left, Expression *right, unsigned char order) : Operator::Operator(left, right)
 {
